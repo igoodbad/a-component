@@ -1,0 +1,64 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="a-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <p>Property "simpleString" contains text: [[simpleString]]</p>
+    <p>Property "aNumber" contains the number: [[aNumber]]</p>
+    <p>
+      In this part us can change value of property "simpleString"
+      <iron-input >
+        <input value="{{simpleString}}">
+      </iron-input>
+    </p>
+    <p></p>
+  </template>
+
+  <script>
+    /**
+     * `a-component`
+     * A one component
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class AComponent extends Polymer.Element {
+      static get is() { return 'a-component'; }
+      static get properties() {
+        return {
+          simpleString: {
+            type: String,
+            value: 'Hello!!!!',
+            observer: "_allIsWell"
+          },
+          aNumber: {
+            type: String,
+            value: 4
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        const inputElement = this.shadowRoot.querySelector("iron-input").querySelector("input");
+        inputElement.addEventListener("keyup", event => {
+          this.set("simpleString", inputElement.value)
+        })
+      }
+
+      _allIsWell(theString){
+        this.dispatchEvent(new CustomEvent("aBeautifulFunction",{
+          detail: theString
+        }));
+      }
+
+    }
+
+    window.customElements.define(AComponent.is, AComponent);
+  </script>
+</dom-module>
